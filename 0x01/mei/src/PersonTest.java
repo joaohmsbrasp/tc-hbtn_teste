@@ -11,12 +11,13 @@ public class PersonTest {
 
     @BeforeAll
     public static void setup() {
-        LocalDate birthDate = LocalDate.of(2000, 1, 1); // Data de nascimento: 01/01/2000
-        person = new Person("Paul", "McCartney", birthDate, true, true, true);
+        // Configurando uma pessoa base que não deve se qualificar como MEI
+        person = new Person("Paul", "McCartney", LocalDate.of(2000, 1, 1), true, true, true);
     }
 
     @Test
     public void show_full_name() {
+        // Verificando se o método fullName retorna o nome completo correto
         assertEquals("Paul McCartney", person.fullName());
     }
 
@@ -28,21 +29,28 @@ public class PersonTest {
 
     @Test
     public void person_is_MEI() {
-        // Configura pessoa para ser válida como MEI
-        LocalDate birthDate = LocalDate.of(1990, 1, 1); // Data de nascimento: 01/01/1990
-        person = new Person("John", "Lennon", birthDate, false, false, false);
-        person.setSalary(1000); // Salário mensal: 1000
+        // Configurando pessoa com todas as condições válidas para ser MEI
+        Person validPerson = new Person("John", "Lennon", LocalDate.of(1990, 1, 1), false, false, false);
+        validPerson.setSalary(1000); // Salário mensal: 1000
 
-        assertTrue(person.isMEI());
+        assertTrue(validPerson.isMEI());
     }
 
     @Test
     public void person_is_not_MEI() {
-        // Configura pessoa para não ser válida como MEI
-        LocalDate birthDate = LocalDate.of(1990, 1, 1); // Data de nascimento: 01/01/1990
-        person = new Person("George", "Harrison", birthDate, true, true, true);
-        person.setSalary(15000); // Salário anual será maior que 130000
+        // Configurando pessoa com várias condições que a impedem de ser MEI
+        Person invalidPerson = new Person("George", "Harrison", LocalDate.of(1990, 1, 1), true, true, true);
+        invalidPerson.setSalary(15000);
 
-        assertFalse(person.isMEI());
+        assertFalse(invalidPerson.isMEI());
+    }
+
+    @Test
+    public void person_is_not_MEI_due_to_salary() {
+        // Configurando pessoa com salário acima do limite para ser MEI
+        Person invalidSalaryPerson = new Person("Ringo", "Starr", LocalDate.of(1985, 3, 15), false, false, false);
+        invalidSalaryPerson.setSalary(12000);
+
+        assertFalse(invalidSalaryPerson.isMEI());
     }
 }
