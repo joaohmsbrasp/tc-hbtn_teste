@@ -1,8 +1,7 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,10 +11,7 @@ public class PersonTest {
 
     @BeforeAll
     public static void setup() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2000, Calendar.JANUARY, 1); // Data de nascimento: 01/01/2000
-        Date birthDate = calendar.getTime();
-
+        LocalDate birthDate = LocalDate.of(2000, 1, 1); // Data de nascimento: 01/01/2000
         person = new Person("Paul", "McCartney", birthDate, true, true, true);
     }
 
@@ -33,7 +29,8 @@ public class PersonTest {
     @Test
     public void person_is_MEI() {
         // Configura pessoa para ser válida como MEI
-        person = new Person("John", "Lennon", new Date(100, 0, 1), false, false, false);
+        LocalDate birthDate = LocalDate.of(1990, 1, 1); // Data de nascimento: 01/01/1990
+        person = new Person("John", "Lennon", birthDate, false, false, false);
         person.setSalary(1000); // Salário mensal: 1000
 
         assertTrue(person.isMEI());
@@ -42,7 +39,8 @@ public class PersonTest {
     @Test
     public void person_is_not_MEI() {
         // Configura pessoa para não ser válida como MEI
-        person = new Person("George", "Harrison", new Date(100, 0, 1), true, true, true);
+        LocalDate birthDate = LocalDate.of(1990, 1, 1); // Data de nascimento: 01/01/1990
+        person = new Person("George", "Harrison", birthDate, true, true, true);
         person.setSalary(15000); // Salário anual será maior que 130000
 
         assertFalse(person.isMEI());
